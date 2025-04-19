@@ -40,7 +40,7 @@ window {{
   background-color: {colors['color0']};
   color: {colors['color7']};
   font-family: 'Fira Code', monospace;
-  font-size: 16px;
+  font-size: 14px;
   border-radius: 10px;
 }}
 
