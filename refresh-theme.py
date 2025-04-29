@@ -90,7 +90,7 @@ def apply_theme():
         try:
 #            subprocess.run(["cp", "-r", os.path.expanduser("~/.cache/wal/colors-waybar.css"),
 #                            os.path.expanduser("~/.config/waybar/colors-waybar.css")], check=True)
-            subprocess.run([os.path.expanduser("~/PycharmProjects/PyTheme/css-to-scss-waybar.sh")] , check=True)
+            subprocess.run([os.path.expanduser("//css-to-scss-waybar.sh")], check=True)
         except subprocess.CalledProcessError as e:
             log_error("Errore nell'applicare il tema a Waybar", e)
 
@@ -102,7 +102,7 @@ def apply_theme():
 
     if file_exists("~/.cache/wal/colors-waybar.css"):
         try:
-            subprocess.run([os.path.expanduser("~/PycharmProjects/PyTheme/css-to-scss-swaync.sh")], check=True)
+            subprocess.run([os.path.expanduser("//css-to-scss-swaync.sh")], check=True)
         except subprocess.CalledProcessError as e:
             log_error("Errore nell'applicare il tema a SwayNC", e)
 
