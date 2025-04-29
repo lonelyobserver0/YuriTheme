@@ -119,6 +119,7 @@ def apply_theme():
             log_error("Errore nel ricaricare Waybar", e)
 
     print("Tema aggiornato!")
+    print("Monitoraggio delle modifiche dello sfondo...")
 
 
 def main():
