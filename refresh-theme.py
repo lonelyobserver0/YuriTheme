@@ -106,6 +106,12 @@ def apply_theme():
         except subprocess.CalledProcessError as e:
             log_error("Errore nell'applicare il tema a SwayNC", e)
 
+    if file_exists("~/.cache/wal/colors-rofi-dark.rasi"):
+        try:
+            subprocess.run([os.path.expanduser("~/Code/YuriLand/YuriTheme/make-rofi-theme.sh")], check=True)
+        except subprocess.CalledProcessError as e:
+            log_error("Errore nell'applicare il tema a Rofi", e)
+
     if command_exists("pkill"):
         try:
             subprocess.run(["pkill", "-USR1", "ironbar"], check=True)
