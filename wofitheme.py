@@ -76,8 +76,11 @@ window {{
 """)
 
 def apply_theme():
-    write_style_file()
-    subprocess.run(["wofi", "--show", "drun"])
+    try:
+      write_style_file()
+      subprocess.run(["wofi", "--show", "drun"])
+    except Exception:
+      print("Error with Wofi")
 
 if __name__ == "__main__":
     apply_theme()

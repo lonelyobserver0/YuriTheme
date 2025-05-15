@@ -82,14 +82,13 @@ def apply_theme():
 
     if file_exists("~/.cache/wal/colors.json"):
         try:
-            wofitheme.apply_theme()
+            #wofitheme.apply_theme()
+            pass
         except subprocess.CalledProcessError as e:
             log_error("Errore nell'applicare il tema a Wofi", e)
 
     if file_exists("~/.cache/wal/colors-waybar.css"):
         try:
-#            subprocess.run(["cp", "-r", os.path.expanduser("~/.cache/wal/colors-waybar.css"),
-#                            os.path.expanduser("~/.config/waybar/colors-waybar.css")], check=True)
             subprocess.run([os.path.expanduser("~/Code/YuriLand/YuriTheme/css-to-scss-waybar.sh")], check=True)
         except subprocess.CalledProcessError as e:
             log_error("Errore nell'applicare il tema a Waybar", e)
