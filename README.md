@@ -20,4 +20,4 @@ and
 `pipx inject <library-name> <venv-name>`
 
 ## Please note
-That for now it works only with swww setted wallpaper.
+It works only with swww setted wallpaper (for now).
