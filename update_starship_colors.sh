@@ -3,9 +3,11 @@
 # File di configurazione dei colori generati da pywal
 WAL_COLORS="$HOME/.cache/wal/colors.sh"
 
-# File di configurazione di Starship
-STARSHIP_CONFIG="$HOME/.config/starship/starship-conf3.toml"
-BACKUP="$STARSHIP_CONFIG.bak"
+# File di configurazione di Starship con nomi di variabili colorX
+SOURCE_CONFIG="$HOME/.config/starship/starship-conf3.toml"
+
+# File generato con colori sostituiti
+OUTPUT_CONFIG="$HOME/.config/starship/starship-pywal.toml"
 
 # Verifica esistenza dei file
 if [[ ! -f "$WAL_COLORS" ]]; then
@@ -13,26 +15,25 @@ if [[ ! -f "$WAL_COLORS" ]]; then
     exit 1
 fi
 
-if [[ ! -f "$STARSHIP_CONFIG" ]]; then
-    echo "Errore: $STARSHIP_CONFIG non trovato."
+if [[ ! -f "$SOURCE_CONFIG" ]]; then
+    echo "Errore: $SOURCE_CONFIG non trovato."
     exit 1
 fi
-
-# Crea backup
-cp "$STARSHIP_CONFIG" "$BACKUP"
-echo "Backup creato: $BACKUP"
 
 # Carica i colori da pywal
 source "$WAL_COLORS"
 
-# Array di variabili di colore da sostituire
+# Copia il file di base in quello di output
+cp "$SOURCE_CONFIG" "$OUTPUT_CONFIG"
+
+# Sostituisce ogni colorX con il valore esadecimale corrispondente
 for i in {0..15}; do
     varname="color$i"
     colorval="${!varname}"
     if [[ -n "$colorval" ]]; then
-        # Sostituisci "colorX" con "#xxxxxx" nel file TOML
-        sed -i "s/\\b$varname\\b/$colorval/g" "$STARSHIP_CONFIG"
+        # usa \b per sostituzioni precise, con delimitatori { } per sed
+        sed -i "s/\${$varname}/$colorval/g" "$OUTPUT_CONFIG"
     fi
 done
 
-echo "Colori aggiornati in $STARSHIP_CONFIG"
+echo "Configurazione scritta in: $OUTPUT_CONFIG"
