@@ -4,7 +4,7 @@
 WAL_COLORS="$HOME/.cache/wal/colors.sh"
 
 # File di configurazione di Starship con nomi di variabili colorX
-SOURCE_CONFIG="$HOME/.config/starship/starship-conf3.toml"
+SOURCE_CONFIG="$HOME/.config/starship/template.toml"
 
 # File generato con colori sostituiti
 OUTPUT_CONFIG="$HOME/.config/starship/starship-pywal.toml"
