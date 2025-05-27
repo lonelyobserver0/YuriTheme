@@ -109,8 +109,8 @@ def reload_bars():
             log_error("Errore nel ricaricare Ironbar", e)
 
         try:
-            subprocess.run(["pkill", "-USR1", "waybar"], check=True)
-            subprocess.run(['zsh', '-c', "bgp waybar"], capture_output=True, text=True)
+            subprocess.run(["fish", "-c", "yuribar"], check=True)
+            subprocess.run(["fish", "-c", "yuribar"], capture_output=True, text=True)
         except subprocess.CalledProcessError as e:
             log_error("Errore nel ricaricare Waybar", e)
 
