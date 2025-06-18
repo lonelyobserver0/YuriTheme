@@ -20,7 +20,11 @@ def get_wallpaper():
         swww_cache = os.path.expanduser("~/.cache/swww/eDP-1")
         if os.path.exists(swww_cache):
             with open(swww_cache, "r") as f:
-                return f.read().strip()
+                wallpaper_full = f.read().strip()
+                wallpaper_string = wallpaper_full.split('/', 1)
+                wallpaper = "/" + wallpaper_string[1]
+                print("===========\nIl percorso dell'immagine usata come sfondo: ", wallpaper, "\n===========")
+                return wallpaper
         else:
             log_error("Errore", "Il file ~/.cache/swww/eDP-1 non esiste.")
             return None
@@ -90,9 +94,9 @@ def apply_desktop_themes():
 
 
 def apply_bar_themes():
-    run_if_exists("~/Code/YuriLand/YuriTheme/css-to-scss-waybar.sh")
-    run_if_exists("~/Code/YuriLand/YuriTheme/css-to-scss-swaync.sh")
-    run_if_exists("~/Code/YuriLand/YuriTheme/make-rofi-theme.sh")
+    run_if_exists("~/Code/YuriLand/YuriTheme/update_waybar_colors.sh")
+    run_if_exists("~/Code/YuriLand/YuriTheme/update_swaync_colors.sh")
+    run_if_exists("~/Code/YuriLand/YuriTheme/update_rofi_colors.sh")
 
     if file_exists("~/.cache/wal/colors-foot.ini"):
         try:
