@@ -5,6 +5,9 @@ import inotify.adapters
 import wofitheme
 from datetime import datetime
 
+
+current_file_path = os.path.abspath(__file__)
+HERE_DIR = os.path.dirname(current_file_path)
 LOG_FILE = os.path.expanduser("~/.cache/theme_changer_errors.log")
 
 
@@ -48,6 +51,8 @@ def run_if_exists(path):
             subprocess.run([path], check=True)
         except subprocess.CalledProcessError as e:
             log_error(f"Errore nell'esecuzione di {path}", e)
+    else:
+        log_error("In run_if_exists:", "File not found")
 
 
 def apply_terminal_themes():
@@ -94,9 +99,9 @@ def apply_desktop_themes():
 
 
 def apply_bar_themes():
-    run_if_exists("~/Code/YuriLand/YuriTheme/update_waybar_colors.sh")
-    run_if_exists("~/Code/YuriLand/YuriTheme/update_swaync_colors.sh")
-    run_if_exists("~/Code/YuriLand/YuriTheme/update_rofi_colors.sh")
+    run_if_exists(f"{HERE_DIR}/update_waybar_colors.sh")
+    run_if_exists(f"{HERE_DIR}/update_swaync_colors.sh")
+    run_if_exists(f"{HERE_DIR}/update_rofi_colors.sh")
 
     if file_exists("~/.cache/wal/colors-foot.ini"):
         try:
@@ -120,7 +125,7 @@ def reload_bars():
 
 
 def update_starship_colors():
-    run_if_exists("~/Code/YuriLand/YuriTheme/update_starship_colors.sh")
+    run_if_exists(f"{HERE_DIR}/update_starship_colors.sh")
 
 
 def apply_theme():
