@@ -1,61 +1,77 @@
-#!/usr/bin/python3
-
+#!/usr/bin/env python3
 import json
 import os
 from pathlib import Path
+from hashlib import sha256
 
-# Percorsi
-wal_colors_path = Path.home() / ".cache/wal/colors.json"
-gtk_css_path = Path.home() / ".config/gtk-3.0/gtk.css"
+WAL_COLORS_PATH = Path.home() / ".cache/wal/colors.json"
+GTK_CSS_PATH = Path.home() / ".config/gtk-3.0/gtk.css"
 
-# Controllo esistenza del file
-if not wal_colors_path.exists():
-    print("❌ File dei colori non trovato. Esegui prima `wal -i <immagine>`.")
-    exit(1)
+def log(msg, type="info"):
+    COLORS = {"info": "\033[1;36m", "ok": "\033[1;32m", "err": "\033[1;31m", "reset": "\033[0m"}
+    print(f"{COLORS.get(type, '')}[{type.upper()}] {msg}{COLORS['reset']}")
 
-# Leggi i colori da pywal
-with open(wal_colors_path, "r") as f:
-    wal_data = json.load(f)
+def read_wal_colors(path):
+    if not path.exists():
+        log(f"File non trovato: {path}", "err")
+        raise FileNotFoundError("Esegui prima 'wal -i <immagine>'")
+    with open(path, "r") as f:
+        return json.load(f)["colors"]
 
-colors = wal_data["colors"]
-background = colors["color0"]
-foreground = colors["color7"]
-accent = colors["color4"]  # ad esempio blu
+def generate_gtk_css(colors):
+    bg = colors["color0"]
+    fg = colors["color7"]
+    accent = colors["color4"]
 
-# Costruzione del tema CSS
-gtk_css = f"""
-/* pywal + Nemo GTK theme */
+    return f"""\
+/* === Tema GTK personalizzato da pywal === */
 * {{
-    background-color: {background};
-    color: {foreground};
+    background-color: {bg};
+    color: {fg};
     border-color: {accent};
 }}
 
 .nemo-window {{
-    background-color: {background};
-    color: {foreground};
+    background-color: {bg};
+    color: {fg};
 }}
 
 .view {{
-    background-color: {background};
-    color: {foreground};
+    background-color: {bg};
+    color: {fg};
 }}
 
 .sidebar, .sidebar .view {{
-    background-color: {background};
-    color: {foreground};
+    background-color: {bg};
+    color: {fg};
 }}
 
 .selected, .selected:focus {{
     background-color: {accent};
-    color: {background};
+    color: {bg};
 }}
 """
 
-# Scrittura nel file GTK CSS
-os.makedirs(gtk_css_path.parent, exist_ok=True)
-with open(gtk_css_path, "w") as f:
-    f.write(gtk_css)
+def write_if_changed(path, content):
+    if path.exists():
+        current = path.read_text()
+        if sha256(current.encode()).hexdigest() == sha256(content.encode()).hexdigest():
+            log("Tema già aggiornato, nessuna modifica necessaria.", "info")
+            return False
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(content)
+    return True
 
-print(f"✅ Tema GTK aggiornato con i colori di pywal.")
-print(f"👉 Riavvia Nemo o il tuo DE per vedere i cambiamenti.")
+def main():
+    try:
+        colors = read_wal_colors(WAL_COLORS_PATH)
+        css = generate_gtk_css(colors)
+        if write_if_changed(GTK_CSS_PATH, css):
+            log(f"Tema GTK aggiornato: {GTK_CSS_PATH}", "ok")
+        else:
+            log(f"File GTK invariato: {GTK_CSS_PATH}", "info")
+    except Exception as e:
+        log(str(e), "err")
+
+if __name__ == "__main__":
+    main()
