@@ -2,7 +2,6 @@ import os
 import subprocess
 import time
 import inotify.adapters
-import wofitheme
 from datetime import datetime
 
 
@@ -102,6 +101,8 @@ def apply_bar_themes():
     run_if_exists(f"{HERE_DIR}/update_waybar_colors.sh")
     run_if_exists(f"{HERE_DIR}/update_swaync_colors.sh")
     run_if_exists(f"{HERE_DIR}/update_rofi_colors.sh")
+    run_if_exists(f"{HERE_DIR}/update_wofi_colors.sh")
+    run_if_exists(f"{HERE_DIR}/update_nemo_colors.py")
 
     if file_exists("~/.cache/wal/colors-foot.ini"):
         try:
