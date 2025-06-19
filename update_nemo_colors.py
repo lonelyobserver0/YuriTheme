@@ -19,36 +19,78 @@ def read_wal_colors(path):
         return json.load(f)["colors"]
 
 def generate_gtk_css(colors):
-    bg = colors["color0"]
-    fg = colors["color7"]
-    accent = colors["color4"]
-
     return f"""\
-/* === Tema GTK personalizzato da pywal === */
+@define-color bg_color   {colors["color0"]};
+@define-color fg_color   {colors["color7"]};
+@define-color accent     {colors["color4"]};
+@define-color select     {colors["color2"]};
+@define-color border     {colors["color1"]};
+@define-color hover      {colors["color3"]};
+
+/* === Tema GTK 3 per Nemo (generato da pywal) === */
+
 * {{
-    background-color: {bg};
-    color: {fg};
-    border-color: {accent};
+  background-color: @bg_color;
+  color: @fg_color;
+  border-color: @border;
+  box-shadow: none;
 }}
 
-.nemo-window {{
-    background-color: {bg};
-    color: {fg};
+.nemo-window, .window {{
+  background-color: @bg_color;
+  color: @fg_color;
 }}
 
-.view {{
-    background-color: {bg};
-    color: {fg};
+.sidebar, .sidebar .view, .places-treeview {{
+  background-color: shade(@bg_color, 1.05);
+  color: @fg_color;
+  border-right: 1px solid @border;
 }}
 
-.sidebar, .sidebar .view {{
-    background-color: {bg};
-    color: {fg};
+.view, .nemo-desktop {{
+  background-color: @bg_color;
+  color: @fg_color;
 }}
 
-.selected, .selected:focus {{
-    background-color: {accent};
-    color: {bg};
+.view:hover {{
+  background-color: @hover;
+}}
+
+entry, .search-bar {{
+  background-color: shade(@bg_color, 1.1);
+  color: @fg_color;
+  border-radius: 6px;
+  border: 1px solid @border;
+  padding: 4px;
+}}
+
+:selected, .selected, .row:selected, .view:selected {{
+  background-color: @select;
+  color: @bg_color;
+}}
+
+.selected:focus, .row:selected:focus {{
+  background-color: @accent;
+  color: @bg_color;
+}}
+
+treeview, .nemo-list-view {{
+  background-color: @bg_color;
+  color: @fg_color;
+  border: none;
+}}
+
+.header-bar, .titlebar {{
+  background-color: shade(@bg_color, 0.95);
+  color: @fg_color;
+  border-bottom: 1px solid @border;
+}}
+
+tooltip {{
+  background-color: @hover;
+  color: @fg_color;
+  border-radius: 4px;
+  padding: 4px;
 }}
 """
 
