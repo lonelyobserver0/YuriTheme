@@ -27,41 +27,36 @@ def generate_gtk_css(colors):
 @define-color border     {colors["color1"]};
 @define-color hover      {colors["color3"]};
 
-/* === Tema GTK 3 per Nemo (generato da pywal) === */
+/* === Tema GTK 3 per Nemo, generato da Pywal === */
 
 * {{
   background-color: @bg_color;
   color: @fg_color;
   border-color: @border;
-  box-shadow: none;
+  transition: all 100ms ease-in-out;
+  border-radius: 6px;
+  padding: 4px;
 }}
 
-.nemo-window, .window {{
+window, .nemo-window {{
   background-color: @bg_color;
   color: @fg_color;
 }}
 
-.sidebar, .sidebar .view, .places-treeview {{
+.sidebar, .places-treeview, .sidebar .view {{
   background-color: shade(@bg_color, 1.05);
   color: @fg_color;
   border-right: 1px solid @border;
 }}
 
-.view, .nemo-desktop {{
+.view, .nemo-desktop, .nemo-list-view, .content-view {{
   background-color: @bg_color;
   color: @fg_color;
 }}
 
-.view:hover {{
+.view:hover, .nemo-list-view:hover, row:hover {{
   background-color: @hover;
-}}
-
-entry, .search-bar {{
-  background-color: shade(@bg_color, 1.1);
   color: @fg_color;
-  border-radius: 6px;
-  border: 1px solid @border;
-  padding: 4px;
 }}
 
 :selected, .selected, .row:selected, .view:selected {{
@@ -74,25 +69,28 @@ entry, .search-bar {{
   color: @bg_color;
 }}
 
-treeview, .nemo-list-view {{
-  background-color: @bg_color;
-  color: @fg_color;
-  border: none;
-}}
-
 .header-bar, .titlebar {{
   background-color: shade(@bg_color, 0.95);
   color: @fg_color;
   border-bottom: 1px solid @border;
 }}
 
+entry, .search-bar, .entry {{
+  background-color: shade(@bg_color, 1.08);
+  color: @fg_color;
+  border-radius: 4px;
+  border: 1px solid @border;
+  padding: 4px;
+}}
+
 tooltip {{
   background-color: @hover;
   color: @fg_color;
   border-radius: 4px;
-  padding: 4px;
+  padding: 6px;
 }}
 """
+
 
 def write_if_changed(path, content):
     if path.exists():
