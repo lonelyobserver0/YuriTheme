@@ -27,69 +27,103 @@ def generate_gtk_css(colors):
 @define-color border     {colors["color1"]};
 @define-color hover      {colors["color3"]};
 
-/* === Tema GTK 3 per Nemo, generato da Pywal === */
+/* === Tema GTK 3 per Nemo (generato da pywal) === */
 
 * {{
   background-color: @bg_color;
   color: @fg_color;
   border-color: @border;
-  transition: all 100ms ease-in-out;
+  transition: background-color 150ms ease, color 150ms ease;
   border-radius: 6px;
-  padding: 4px;
 }}
 
-window, .nemo-window {{
+.nemo-window, window {{
   background-color: @bg_color;
   color: @fg_color;
 }}
 
-.sidebar, .places-treeview, .sidebar .view {{
+.sidebar,
+.sidebar .view,
+.places-treeview {{
   background-color: shade(@bg_color, 1.05);
   color: @fg_color;
   border-right: 1px solid @border;
+  padding: 4px;
 }}
 
-.view, .nemo-desktop, .nemo-list-view, .content-view {{
+.view,
+.nemo-desktop,
+.content-view,
+.nemo-list-view,
+treeview {{
   background-color: @bg_color;
   color: @fg_color;
+  border: none;
+  padding: 6px;
+  font-size: 11pt;
 }}
 
-.view:hover, .nemo-list-view:hover, row:hover {{
+.view:hover row,
+treeview:hover row {{
   background-color: @hover;
   color: @fg_color;
 }}
 
-:selected, .selected, .row:selected, .view:selected {{
+.selected,
+:selected,
+treeview:selected,
+.view:selected,
+row:selected {{
   background-color: @select;
   color: @bg_color;
 }}
 
-.selected:focus, .row:selected:focus {{
+.selected:focus,
+row:selected:focus {{
   background-color: @accent;
   color: @bg_color;
 }}
 
-.header-bar, .titlebar {{
-  background-color: shade(@bg_color, 0.95);
-  color: @fg_color;
-  border-bottom: 1px solid @border;
-}}
-
-entry, .search-bar, .entry {{
+.entry,
+.search-bar,
+entry {{
   background-color: shade(@bg_color, 1.08);
   color: @fg_color;
-  border-radius: 4px;
   border: 1px solid @border;
-  padding: 4px;
+  border-radius: 4px;
+  padding: 4px 6px;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+}}
+
+.header-bar,
+.titlebar {{
+  background-color: shade(@bg_color, 0.97);
+  color: @fg_color;
+  border-bottom: 1px solid @border;
+  padding: 6px;
 }}
 
 tooltip {{
   background-color: @hover;
   color: @fg_color;
   border-radius: 4px;
-  padding: 6px;
+  padding: 4px 8px;
+  border: 1px solid @border;
+}}
+
+progressbar {{
+  background-color: shade(@bg_color, 1.1);
+  border-radius: 6px;
+  border: 1px solid @border;
+}}
+
+progressbar trough,
+progressbar progress {{
+  background-color: @accent;
+  border-radius: 6px;
 }}
 """
+
 
 
 def write_if_changed(path, content):
