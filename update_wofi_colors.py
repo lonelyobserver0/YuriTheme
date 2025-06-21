@@ -16,12 +16,12 @@ def load_wal_colors():
         colors = json.load(f)
     return {
         "BACKGROUND": colors["colors"]["color0"],
-        "ON_PRIMARY": colors["colors"]["color15"],
+        "ONPRIMARY": colors["colors"]["color15"],
         "PRIMARY": colors["colors"]["color4"],
         "SURFACE": colors["colors"]["color1"],
         "SECONDARY": colors["colors"]["color2"],
-        "ON_SURFACE": colors["colors"]["color7"],
-        "ON_BACKGROUND": colors["colors"]["color6"],
+        "ONSURFACE": colors["colors"]["color7"],
+        "ONBACKGROUND": colors["colors"]["color6"],
     }
 
 def generate_scss(template_path, colors):
