@@ -7,7 +7,7 @@ import subprocess
 
 # Percorsi
 WAL_PATH = Path.home() / ".cache/wal/colors.json"
-TEMPLATE_PATH = Path.home() / ".config/wofi/style-template.scss"
+TEMPLATE_PATH = Path.home() / ".config/wofi/src/style-template.scss"
 OUTPUT_SCSS = Path.home() / ".config/wofi/src/wofi.scss"
 OUTPUT_CSS = Path.home() / ".config/wofi/style.css"
 
@@ -26,8 +26,10 @@ def load_wal_colors():
 
 def generate_scss(template_path, colors):
     with open(template_path) as f:
-        template = Template(f.read())
-    result = template.safe_substitute(colors)
+        template = f.read()
+        for key, value in colors.items():
+            template = template.replace(key.upper(), value)
+        result = template
     OUTPUT_SCSS.write_text(result)
     print("[✓] wofi.scss generato")
 
