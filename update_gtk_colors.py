@@ -10,163 +10,130 @@ gtk4_path = Path.home() / ".config/gtk-4.0/gtk.css"
 
 # === Template CSS GTK3 & GTK4 ===
 def generate_gtk_css_template():
-    return """@define-color bg_color   {color0};
-@define-color fg_color   {color7};
-@define-color accent     {color4};
-@define-color highlight  {color2};
-@define-color border     {color1};
-@define-color hover      {color3};
-@define-color warning    {color11};
-@define-color error      {color1};
-@define-color success    {color10};
-@define-color muted      {color5};
+    return """
+@define-color background   {color0};
+@define-color foreground   {color7};
+@define-color primary      {color4};
+@define-color secondary    {color3};
+@define-color success      {color10};
+@define-color warning      {color11};
+@define-color error        {color1};
+@define-color border       {color5};
 
 * {{
-  background-color: @bg_color;
-  color: @fg_color;
-  border-color: @border;
-  border-radius: 6px;
-  font-family: "Noto Sans", "Cantarell", sans-serif;
+  font-family: "Noto Sans", sans-serif;
   font-size: 11pt;
+  color: @foreground;
+  background-color: @background;
+  border-color: @border;
+  transition: all 100ms ease-in-out;
 }}
 
 window, .background, .nemo-window {{
-  background-color: @bg_color;
-  color: @fg_color;
+  background-color: @background;
+  color: @foreground;
 }}
 
 headerbar, .titlebar {{
-  background-color: shade(@bg_color, 0.95);
-  color: @fg_color;
+  background-color: shade(@background, 0.95);
+  color: @foreground;
   border-bottom: 1px solid @border;
 }}
 
-.sidebar, .places-treeview, .sidebar .view {{
-  background-color: shade(@bg_color, 1.03);
-  color: @fg_color;
-  border-right: 1px solid @border;
-}}
-
-.view, treeview, .nemo-desktop, .content-view, columnview, columnview row, list, list row, textview, text {{
-  background-color: @bg_color;
-  color: @fg_color;
-}}
-
-.view:selected, list row:selected, columnview row:selected, treeview:selected, textview:selected {{
-  background-color: @highlight;
-  color: @bg_color;
-}}
-
-.view:hover, treeview:hover, list row:hover, columnview row:hover {{
-  background-color: shade(@hover, 1.1);
-}}
-
-entry, searchentry, GtkEntry {{
-  background-color: shade(@bg_color, 1.05);
-  color: @fg_color;
+button, .button {{
+  background-color: shade(@background, 1.05);
   border: 1px solid @border;
-  padding: 4px 6px;
+  padding: 6px 12px;
   border-radius: 4px;
 }}
-
-entry:focus {{
-  border-color: @accent;
+button:hover, .button:hover {{
+  background-color: @secondary;
 }}
-
-button, GtkButton {{
-  background-color: shade(@bg_color, 1.1);
-  color: @fg_color;
-  border: 1px solid @border;
-  padding: 6px 10px;
-  border-radius: 6px;
+button:active, .button:checked {{
+  background-color: @primary;
+  color: @background;
 }}
-
-button:hover {{
-  background-color: @hover;
-}}
-
-button:active, button:checked {{
-  background-color: @accent;
-  color: @bg_color;
-}}
-
 button:disabled {{
-  background-color: shade(@bg_color, 0.9);
-  color: shade(@fg_color, 0.6);
+  background-color: shade(@background, 0.9);
+  color: shade(@foreground, 0.6);
 }}
 
-menu, menuitem, popover {{
-  background-color: @bg_color;
-  color: @fg_color;
+entry, textview, searchentry, GtkEntry {{
+  background-color: shade(@background, 1.02);
+  color: @foreground;
+  border: 1px solid @border;
+  border-radius: 4px;
+  padding: 4px;
+}}
+entry:focus {{
+  border-color: @primary;
+}}
+
+*:selected, treeview:selected, list:selected, row:selected {{
+  background-color: @primary;
+  color: @background;
+}}
+
+list:hover, row:hover, treeview:hover, columnview row:hover {{
+  background-color: shade(@secondary, 1.1);
+}}
+
+menu, menuitem, popover, .menu {{
+  background-color: @background;
+  color: @foreground;
   border: 1px solid @border;
 }}
-
 menuitem:hover {{
-  background-color: @hover;
+  background-color: @secondary;
 }}
-
 menuitem:disabled {{
-  color: shade(@fg_color, 0.5);
+  color: shade(@foreground, 0.5);
 }}
 
 notebook tab {{
-  background-color: @bg_color;
+  background-color: @background;
   border: 1px solid @border;
   padding: 4px 8px;
 }}
-
 notebook tab:active {{
-  background-color: @accent;
-  color: @bg_color;
+  background-color: @primary;
+  color: @background;
 }}
 
 check, radio {{
-  background-color: shade(@bg_color, 1.05);
+  background-color: shade(@background, 1.05);
   border: 1px solid @border;
 }}
-
 check:checked, radio:checked {{
-  background-color: @accent;
+  background-color: @primary;
+}}
+check:disabled, radio:disabled {{
+  background-color: shade(@background, 0.9);
+  color: shade(@foreground, 0.6);
 }}
 
-check:disabled, radio:disabled {{
-  background-color: shade(@bg_color, 0.9);
-  color: shade(@fg_color, 0.6);
+scrollbar slider {{
+  background-color: @border;
+  border-radius: 4px;
+}}
+scrollbar slider:hover {{
+  background-color: @primary;
 }}
 
 tooltip {{
-  background-color: @hover;
-  color: @fg_color;
+  background-color: @secondary;
+  color: @foreground;
   border: 1px solid @border;
   padding: 4px 8px;
   border-radius: 4px;
 }}
 
-scrollbar slider {{
-  background-color: @muted;
-  border-radius: 4px;
-}}
-
-scrollbar slider:hover {{
-  background-color: @accent;
-}}
-
-progressbar, GtkProgressBar, progressbar trough {{
-  background-color: shade(@bg_color, 1.08);
-}}
-
-progressbar progress {{
-  background-color: @accent;
-  border-radius: 6px;
-}}
-
 label.link, a {{
-  color: @accent;
+  color: @primary;
   text-decoration: underline;
 }}
-
 label.link:hover, a:hover {{
-  color: shade(@accent, 1.2);
+  color: shade(@primary, 1.2);
 }}
 
 .warning {{ color: @warning; }}
@@ -177,7 +144,7 @@ label.link:hover, a:hover {{
 # === Template GTK2 ===
 def generate_gtk2_template():
     return """
-gtk-color-scheme = "fg_color:{color7},bg_color:{color0},base_color:{color0},text_color:{color7},selected_bg_color:{color2},selected_fg_color:{color0},tooltip_bg_color:{color3},tooltip_fg_color:{color7}"
+gtk-color-scheme = "fg_color:{color7},bg_color:{color0},base_color:{color0},text_color:{color7},selected_bg_color:{color4},selected_fg_color:{color0},tooltip_bg_color:{color3},tooltip_fg_color:{color7}"
 
 style "default" {{
   bg[NORMAL]        = "{color0}"
@@ -185,13 +152,11 @@ style "default" {{
   base[NORMAL]      = "{color0}"
   text[NORMAL]      = "{color7}"
 
-  bg[SELECTED]      = "{color2}"
+  bg[SELECTED]      = "{color4}"
   fg[SELECTED]      = "{color0}"
-  base[SELECTED]    = "{color2}"
-  text[SELECTED]    = "{color0}"
 
-  bg[ACTIVE]        = "{color4}"
-  fg[ACTIVE]        = "{color0}"
+  bg[ACTIVE]        = "{color3}"
+  fg[ACTIVE]        = "{color7}"
 
   bg[INSENSITIVE]   = "{color1}"
   fg[INSENSITIVE]   = "{color5}"
@@ -228,15 +193,12 @@ def save_to_file(content: str, path: Path):
 # === MAIN ===
 def main():
     colors = load_pywal_colors()
-
     gtk_css = render_template(generate_gtk_css_template(), colors)
     gtk2_rc = render_template(generate_gtk2_template(), colors)
-
     save_to_file(gtk_css, gtk3_path)
     save_to_file(gtk_css, gtk4_path)
     save_to_file(gtk2_rc, gtk2_path)
-
-    print(f"[✓] Temi GTK aggiornati:")
+    print("[✓] Temi GTK aggiornati:")
     print(f" - GTK2: {gtk2_path}")
     print(f" - GTK3: {gtk3_path}")
     print(f" - GTK4: {gtk4_path}")
