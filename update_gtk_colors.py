@@ -8,7 +8,7 @@ gtk2_path = Path.home() / ".gtkrc-2.0"
 gtk3_path = Path.home() / ".config/gtk-3.0/gtk.css"
 gtk4_path = Path.home() / ".config/gtk-4.0/gtk.css"
 
-# === Template CSS comune (GTK3 + GTK4) ===
+# === Template CSS GTK3 & GTK4 ===
 def generate_gtk_css_template():
     return """@define-color bg_color   {color0};
 @define-color fg_color   {color7};
@@ -21,101 +21,125 @@ def generate_gtk_css_template():
 @define-color success    {color10};
 @define-color muted      {color5};
 
-/* Stile base */
 * {{
   background-color: @bg_color;
   color: @fg_color;
   border-color: @border;
+  border-radius: 6px;
   font-family: "Noto Sans", "Cantarell", sans-serif;
   font-size: 11pt;
-  transition: all 100ms ease-in-out;
-  border-radius: 6px;
 }}
 
-window, .nemo-window, .background {{
+window, .background, .nemo-window {{
   background-color: @bg_color;
   color: @fg_color;
 }}
 
-.header-bar,
-.titlebar,
-.header-bar.default-decoration,
-headerbar {{
+headerbar, .titlebar {{
   background-color: shade(@bg_color, 0.95);
   color: @fg_color;
   border-bottom: 1px solid @border;
 }}
 
-.sidebar,
-.places-treeview,
-.sidebar .view {{
+.sidebar, .places-treeview, .sidebar .view {{
   background-color: shade(@bg_color, 1.03);
   color: @fg_color;
   border-right: 1px solid @border;
 }}
 
-.view,
-treeview,
-.nemo-desktop,
-.content-view,
-columnview,
-columnview row,
-list,
-list row,
-textview,
-text {{
+.view, treeview, .nemo-desktop, .content-view, columnview, columnview row, list, list row, textview, text {{
   background-color: @bg_color;
   color: @fg_color;
 }}
 
-.view:selected,
-treeview:selected,
-list row:selected,
-columnview row:selected,
-textview:selected {{
+.view:selected, list row:selected, columnview row:selected, treeview:selected, textview:selected {{
   background-color: @highlight;
   color: @bg_color;
 }}
 
-.view:hover,
-treeview:hover,
-list row:hover,
-columnview row:hover {{
-  background-color: @hover;
+.view:hover, treeview:hover, list row:hover, columnview row:hover {{
+  background-color: shade(@hover, 1.1);
 }}
 
-entry,
-GtkEntry,
-.search-bar,
-searchentry,
-searchbar {{
-  background-color: shade(@bg_color, 1.08);
+entry, searchentry, GtkEntry {{
+  background-color: shade(@bg_color, 1.05);
   color: @fg_color;
   border: 1px solid @border;
   padding: 4px 6px;
   border-radius: 4px;
 }}
 
-button,
-GtkButton {{
+entry:focus {{
+  border-color: @accent;
+}}
+
+button, GtkButton {{
   background-color: shade(@bg_color, 1.1);
   color: @fg_color;
   border: 1px solid @border;
   padding: 6px 10px;
+  border-radius: 6px;
 }}
 
 button:hover {{
   background-color: @hover;
 }}
 
-button:active,
-button:checked {{
+button:active, button:checked {{
   background-color: @accent;
   color: @bg_color;
 }}
 
-scrollbar {{
-  background-color: transparent;
+button:disabled {{
+  background-color: shade(@bg_color, 0.9);
+  color: shade(@fg_color, 0.6);
+}}
+
+menu, menuitem, popover {{
+  background-color: @bg_color;
+  color: @fg_color;
+  border: 1px solid @border;
+}}
+
+menuitem:hover {{
+  background-color: @hover;
+}}
+
+menuitem:disabled {{
+  color: shade(@fg_color, 0.5);
+}}
+
+notebook tab {{
+  background-color: @bg_color;
+  border: 1px solid @border;
+  padding: 4px 8px;
+}}
+
+notebook tab:active {{
+  background-color: @accent;
+  color: @bg_color;
+}}
+
+check, radio {{
+  background-color: shade(@bg_color, 1.05);
+  border: 1px solid @border;
+}}
+
+check:checked, radio:checked {{
+  background-color: @accent;
+}}
+
+check:disabled, radio:disabled {{
+  background-color: shade(@bg_color, 0.9);
+  color: shade(@fg_color, 0.6);
+}}
+
+tooltip {{
+  background-color: @hover;
+  color: @fg_color;
+  border: 1px solid @border;
+  padding: 4px 8px;
+  border-radius: 4px;
 }}
 
 scrollbar slider {{
@@ -127,17 +151,7 @@ scrollbar slider:hover {{
   background-color: @accent;
 }}
 
-tooltip {{
-  background-color: @hover;
-  color: @fg_color;
-  border-radius: 4px;
-  padding: 4px 8px;
-  border: 1px solid @border;
-}}
-
-progressbar,
-GtkProgressBar,
-progressbar trough {{
+progressbar, GtkProgressBar, progressbar trough {{
   background-color: shade(@bg_color, 1.08);
 }}
 
@@ -146,14 +160,12 @@ progressbar progress {{
   border-radius: 6px;
 }}
 
-label.link,
-a {{
+label.link, a {{
   color: @accent;
   text-decoration: underline;
 }}
 
-label.link:hover,
-a:hover {{
+label.link:hover, a:hover {{
   color: shade(@accent, 1.2);
 }}
 
@@ -162,39 +174,48 @@ a:hover {{
 .success {{ color: @success; }}
 """
 
-# === Template per GTK2 ===
+# === Template GTK2 ===
 def generate_gtk2_template():
     return """
-gtk-color-scheme = "base_color:{color0},fg_color:{color7},bg_color:{color0},text_color:{color7},selected_bg_color:{color2},selected_fg_color:{color0},tooltip_bg_color:{color3},tooltip_fg_color:{color7}"
+gtk-color-scheme = "fg_color:{color7},bg_color:{color0},base_color:{color0},text_color:{color7},selected_bg_color:{color2},selected_fg_color:{color0},tooltip_bg_color:{color3},tooltip_fg_color:{color7}"
 
 style "default" {{
   bg[NORMAL]        = "{color0}"
   fg[NORMAL]        = "{color7}"
   base[NORMAL]      = "{color0}"
   text[NORMAL]      = "{color7}"
+
   bg[SELECTED]      = "{color2}"
   fg[SELECTED]      = "{color0}"
   base[SELECTED]    = "{color2}"
   text[SELECTED]    = "{color0}"
+
+  bg[ACTIVE]        = "{color4}"
+  fg[ACTIVE]        = "{color0}"
+
+  bg[INSENSITIVE]   = "{color1}"
+  fg[INSENSITIVE]   = "{color5}"
+
+  bg[PRELIGHT]      = "{color3}"
+  fg[PRELIGHT]      = "{color7}"
 }}
 
 class "GtkWidget" style "default"
 """
 
-# === Carica colori da pywal ===
+# === Carica i colori ===
 def load_pywal_colors():
     if not wal_path.exists():
-        raise FileNotFoundError("File colors.json non trovato. Esegui prima `wal`.")
+        raise FileNotFoundError("colors.json non trovato. Esegui prima `wal`.")
     with open(wal_path) as f:
         data = json.load(f)
     colors = data["colors"]
-    # Validazione base
     for i in range(16):
         if f"color{i}" not in colors:
-            raise KeyError(f"Manca il colore color{i} in colors.json")
+            raise KeyError(f"color{i} mancante in colors.json")
     return colors
 
-# === Sostituisci nel template ===
+# === Sostituisci i placeholder ===
 def render_template(template: str, colors: dict) -> str:
     return template.format(**colors)
 
@@ -207,20 +228,18 @@ def save_to_file(content: str, path: Path):
 # === MAIN ===
 def main():
     colors = load_pywal_colors()
-    
-    # GTK 3 & 4
+
     gtk_css = render_template(generate_gtk_css_template(), colors)
+    gtk2_rc = render_template(generate_gtk2_template(), colors)
+
     save_to_file(gtk_css, gtk3_path)
     save_to_file(gtk_css, gtk4_path)
-
-    # GTK 2
-    gtk2_rc = render_template(generate_gtk2_template(), colors)
     save_to_file(gtk2_rc, gtk2_path)
 
-    print(f"[✓] Temi aggiornati:")
-    print(f"  - GTK2:  {gtk2_path}")
-    print(f"  - GTK3:  {gtk3_path}")
-    print(f"  - GTK4:  {gtk4_path}")
+    print(f"[✓] Temi GTK aggiornati:")
+    print(f" - GTK2: {gtk2_path}")
+    print(f" - GTK3: {gtk3_path}")
+    print(f" - GTK4: {gtk4_path}")
 
 if __name__ == "__main__":
     main()
