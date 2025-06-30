@@ -9,15 +9,12 @@ theme_dir = Path.home() / ".themes" / theme_name
 wal_colors_path = Path.home() / ".cache" / "wal" / "colors.json"
 icon_theme = "Papirus-Dark"
 cursor_theme = "Bibata-Modern-Ice"
-gtk_font = "Sans 10"
 
 # Percorsi .config
 config_gtk3 = Path.home() / ".config" / "gtk-3.0"
 config_gtk4 = Path.home() / ".config" / "gtk-4.0"
 
 def load_pywal_colors():
-    if not wal_colors_path.exists():
-        raise FileNotFoundError(f"{wal_colors_path} non trovato. Esegui 'wal' prima.")
     with open(wal_colors_path) as f:
         data = json.load(f)
         return data["colors"], data["special"]
@@ -79,10 +76,7 @@ def get_gtk3_css(colors):
 * {{
   background-color: @bg_color;
   color: @fg_color;
-  border: 1px solid @focus_border;
-  border-radius: 6px;
-  padding: 4px;
-  box-shadow: inset 0 0 0 1px @focus_border;
+  border-color: @focus_border;
 }}
 
 *:hover {{
@@ -103,12 +97,9 @@ def get_gtk3_css(colors):
   color: @selected_fg;
 }}
 
-tooltip,
-tooltip.background {{
+tooltip {{
   background-color: @tooltip_bg;
   color: @tooltip_fg;
-  border-radius: 4px;
-  padding: 6px;
 }}
 """
 
@@ -117,10 +108,7 @@ def get_gtk4_css(colors):
 * {{
   background-color: {colors['color0']};
   color: {colors['color15']};
-  border: 1px solid {colors['color5']};
-  border-radius: 6px;
-  padding: 4px;
-  box-shadow: inset 0 0 0 1px {colors['color5']};
+  border-color: {colors['color5']};
 }}
 
 *:hover {{
@@ -141,17 +129,8 @@ def get_gtk4_css(colors):
   color: {colors['color15']};
 }}
 
-tooltip,
-tooltip.background {{
+tooltip {{
   background-color: {colors['color1']};
-  color: {colors['color15']};
-  border-radius: 4px;
-  padding: 6px;
-}}
-
-window.background,
-window {{
-  background-color: {colors['color0']};
   color: {colors['color15']};
 }}
 """
@@ -161,7 +140,7 @@ def write_settings_ini():
 gtk-theme-name={theme_name}
 gtk-icon-theme-name={icon_theme}
 gtk-cursor-theme-name={cursor_theme}
-gtk-font-name={gtk_font}
+gtk-font-name=Sans 10
 """
     (config_gtk3 / "settings.ini").write_text(ini.strip())
 
@@ -204,8 +183,6 @@ def try_apply_theme():
     os.system(f"gsettings set org.gnome.desktop.wm.preferences theme '{theme_name}' || true")
     os.system(f"gsettings set org.gnome.desktop.interface icon-theme '{icon_theme}' || true")
     os.system(f"gsettings set org.gnome.desktop.interface cursor-theme '{cursor_theme}' || true")
-    os.system("gsettings set org.gnome.desktop.interface gtk-application-prefer-dark-theme true || true")
-    os.system("pkill -USR1 xsettingsd || true")
 
 def main():
     colors, _ = load_pywal_colors()
@@ -215,7 +192,6 @@ def main():
     try_apply_theme()
     print(f"\n✅ Tema '{theme_name}' generato in '{theme_dir}'.")
     print(f"📁 gtk.css anche in:\n  {config_gtk3}/gtk.css\n  {config_gtk4}/gtk.css")
-    print(f"🖼️ Icone: {icon_theme}  |  Cursore: {cursor_theme}")
     print("🎨 Tutti gli stati UI (hover, focus, selezione, disabilitato, tooltip) sono gestiti.")
 
 if __name__ == "__main__":
