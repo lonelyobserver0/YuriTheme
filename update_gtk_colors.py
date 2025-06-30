@@ -7,16 +7,12 @@ from pathlib import Path
 theme_name = "WalTheme"
 theme_dir = Path.home() / ".themes" / theme_name
 wal_colors_path = Path.home() / ".cache" / "wal" / "colors.json"
-
-# Opzionali: icone e cursori
 icon_theme = "Papirus-Dark"
 cursor_theme = "Bibata-Modern-Ice"
 
-# Percorsi config locali
+# Percorsi .config
 config_gtk3 = Path.home() / ".config" / "gtk-3.0"
 config_gtk4 = Path.home() / ".config" / "gtk-4.0"
-
-# === UTILITY ===
 
 def load_pywal_colors():
     with open(wal_colors_path) as f:
@@ -29,9 +25,35 @@ def make_dirs():
     config_gtk3.mkdir(parents=True, exist_ok=True)
     config_gtk4.mkdir(parents=True, exist_ok=True)
 
-# === CSS GENERATORS ===
+def write_index_theme():
+    content = f"""[Desktop Entry]
+Type=X-GNOME-Metatheme
+Name={theme_name}
+Comment=Pywal-based dynamic theme
+Encoding=UTF-8
 
-def get_gtk_css(colors):
+[X-GNOME-Metatheme]
+GtkTheme={theme_name}
+MetacityTheme={theme_name}
+IconTheme={icon_theme}
+CursorTheme={cursor_theme}
+"""
+    (theme_dir / "index.theme").write_text(content.strip())
+
+def get_gtk2(colors):
+    return f"""
+style "default" {{
+  bg[NORMAL] = "{colors['color0']}"
+  fg[NORMAL] = "{colors['color15']}"
+  base[NORMAL] = "{colors['color0']}"
+  text[NORMAL] = "{colors['color7']}"
+  selected_bg[NORMAL] = "{colors['color2']}"
+  selected_fg[NORMAL] = "{colors['color15']}"
+}}
+class "*" style "default"
+"""
+
+def get_gtk3_css(colors):
     return f"""
 @define-color bg_color        {colors['color0']};
 @define-color fg_color        {colors['color15']};
@@ -113,48 +135,14 @@ tooltip {{
 }}
 """
 
-# === FILE WRITERS ===
-
-def write_index_theme():
-    content = f"""[Desktop Entry]
-Type=X-GNOME-Metatheme
-Name={theme_name}
-Comment=Pywal generated GTK theme
-Encoding=UTF-8
-
-[X-GNOME-Metatheme]
-GtkTheme={theme_name}
-MetacityTheme={theme_name}
-IconTheme={icon_theme}
-CursorTheme={cursor_theme}
+def write_settings_ini():
+    ini = f"""[Settings]
+gtk-theme-name={theme_name}
+gtk-icon-theme-name={icon_theme}
+gtk-cursor-theme-name={cursor_theme}
+gtk-font-name=Sans 10
 """
-    with open(theme_dir / "index.theme", "w") as f:
-        f.write(content.strip())
-
-def write_gtk2(colors):
-    gtkrc = f"""
-style "default" {{
-  bg[NORMAL] = "{colors['color0']}"
-  fg[NORMAL] = "{colors['color15']}"
-  base[NORMAL] = "{colors['color0']}"
-  text[NORMAL] = "{colors['color7']}"
-  selected_bg[NORMAL] = "{colors['color2']}"
-  selected_fg[NORMAL] = "{colors['color15']}"
-}}
-class "*" style "default"
-"""
-    with open(theme_dir / "gtk-2.0" / "gtkrc", "w") as f:
-        f.write(gtkrc.strip())
-
-def write_gtk3(colors):
-    css = get_gtk_css(colors)
-    (theme_dir / "gtk-3.0" / "gtk.css").write_text(css.strip())
-    (config_gtk3 / "gtk.css").write_text(css.strip())
-
-def write_gtk4(colors):
-    css = get_gtk4_css(colors)
-    (theme_dir / "gtk-4.0" / "gtk.css").write_text(css.strip())
-    (config_gtk4 / "gtk.css").write_text(css.strip())
+    (config_gtk3 / "settings.ini").write_text(ini.strip())
 
 def write_metacity(colors):
     xml = f"""<metacity_theme>
@@ -170,34 +158,41 @@ def write_metacity(colors):
   </frame_geometry>
 </metacity_theme>
 """
-    with open(theme_dir / "metacity-1" / "metacity-theme-1.xml", "w") as f:
-        f.write(xml.strip())
+    (theme_dir / "metacity-1" / "metacity-theme-1.xml").write_text(xml.strip())
 
-def write_gnome_shell_placeholder():
+def write_files(colors):
+    # GTK2
+    (theme_dir / "gtk-2.0" / "gtkrc").write_text(get_gtk2(colors).strip())
+
+    # GTK3
+    gtk3_css = get_gtk3_css(colors)
+    (theme_dir / "gtk-3.0" / "gtk.css").write_text(gtk3_css.strip())
+    (config_gtk3 / "gtk.css").write_text(gtk3_css.strip())
+
+    # GTK4
+    gtk4_css = get_gtk4_css(colors)
+    (theme_dir / "gtk-4.0" / "gtk.css").write_text(gtk4_css.strip())
+    (config_gtk4 / "gtk.css").write_text(gtk4_css.strip())
+
+    write_settings_ini()
+    write_metacity(colors)
     (theme_dir / "gnome-shell" / "gnome-shell.css").write_text("/* Placeholder */")
 
-# === APPLY ===
-
-def apply_theme():
+def try_apply_theme():
     os.system(f"gsettings set org.gnome.desktop.interface gtk-theme '{theme_name}' || true")
     os.system(f"gsettings set org.gnome.desktop.wm.preferences theme '{theme_name}' || true")
     os.system(f"gsettings set org.gnome.desktop.interface icon-theme '{icon_theme}' || true")
     os.system(f"gsettings set org.gnome.desktop.interface cursor-theme '{cursor_theme}' || true")
 
-# === MAIN ===
-
 def main():
     colors, _ = load_pywal_colors()
     make_dirs()
     write_index_theme()
-    write_gtk2(colors)
-    write_gtk3(colors)
-    write_gtk4(colors)
-    write_metacity(colors)
-    write_gnome_shell_placeholder()
-    apply_theme()
-    print(f"\n✅ Tema '{theme_name}' creato e applicato.")
-    print(f"➡️  File gtk.css scritti anche in:\n  - {config_gtk3}/gtk.css\n  - {config_gtk4}/gtk.css")
+    write_files(colors)
+    try_apply_theme()
+    print(f"\n✅ Tema '{theme_name}' generato in '{theme_dir}'.")
+    print(f"📁 gtk.css anche in:\n  {config_gtk3}/gtk.css\n  {config_gtk4}/gtk.css")
+    print("🎨 Tutti gli stati UI (hover, focus, selezione, disabilitato, tooltip) sono gestiti.")
 
 if __name__ == "__main__":
     main()
