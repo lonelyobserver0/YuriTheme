@@ -98,12 +98,6 @@ def apply_desktop_themes():
 
 
 def apply_bar_themes():
-    run_if_exists(f"{HERE_DIR}/update_waybar_colors.sh")
-    run_if_exists(f"{HERE_DIR}/update_swaync_colors.sh")
-    run_if_exists(f"{HERE_DIR}/update_rofi_colors.sh")
-    run_if_exists(f"{HERE_DIR}/update_wofi_colors.py")
-    #run_if_exists(f"{HERE_DIR}/update_gtk_colors.py")
-
     if file_exists("~/.cache/wal/colors-foot.ini"):
         try:
             subprocess.run(["cp", os.path.expanduser("~/.cache/wal/colors-foot.ini"), os.path.expanduser("~/.config/foot/")], check=True)
@@ -118,11 +112,14 @@ def reload_bars():
         except subprocess.CalledProcessError as e:
             log_error("Errore nel ricaricare Ironbar", e)
 
+        os.system("killall -SIGUSR2 waybar")
+        time.sleep(0.2)
         try:
-            subprocess.run(["fish", "-c", "yuribar"], check=True)
-            subprocess.run(["fish", "-c", "yuribar"], capture_output=True, text=True)
-        except subprocess.CalledProcessError as e:
-            log_error("Errore nel ricaricare Waybar", e)
+            subprocess.check_output(["pidof", "waybar"])
+            print("Waybar ricaricato con SIGUSR2.")
+        except subprocess.CalledProcessError:
+            subprocess.Popen(["waybar"])
+            print("Waybar non era in esecuzione: avviato nuovo processo.")
 
 
 def update_starship_colors():
@@ -147,6 +144,15 @@ def apply_theme():
     apply_bar_themes()
     update_starship_colors()
     reload_bars()
+    
+    run_if_exists(f"{HERE_DIR}/update_waybar_colors.sh")
+    run_if_exists(f"{HERE_DIR}/update_swaync_colors.sh")
+    run_if_exists(f"{HERE_DIR}/update_rofi_colors.sh")
+    run_if_exists(f"{HERE_DIR}/update_swaync_colors.sh")
+    #run_if_exists(f"{HERE_DIR}/update_wofi_colors.py")
+    #run_if_exists(f"{HERE_DIR}/update_gtk_colors.py")
+    
+    
 
     print("Tema aggiornato!")
     print("Monitoraggio delle modifiche dello sfondo...")
