@@ -112,14 +112,11 @@ def reload_bars():
         except subprocess.CalledProcessError as e:
             log_error("Errore nel ricaricare Ironbar", e)
 
-        os.system("killall -SIGUSR2 waybar")
-        time.sleep(0.2)
         try:
-            subprocess.check_output(["pidof", "waybar"])
-            print("Waybar ricaricato con SIGUSR2.")
-        except subprocess.CalledProcessError:
-            subprocess.Popen(["waybar"])
-            print("Waybar non era in esecuzione: avviato nuovo processo.")
+            subprocess.run(["fish", "-c", "yuribar"], check=True)
+            subprocess.run(["fish", "-c", "yuribar"], capture_output=True, text=True)
+        except subprocess.CalledProcessError as e:
+            log_error("Errore nel ricaricare Waybar", e)
 
 
 def update_starship_colors():
