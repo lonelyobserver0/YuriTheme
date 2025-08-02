@@ -146,10 +146,8 @@ def apply_theme():
     run_if_exists(f"{HERE_DIR}/update_swaync_colors.sh")
     run_if_exists(f"{HERE_DIR}/update_rofi_colors.sh")
     run_if_exists(f"{HERE_DIR}/update_swaync_colors.sh")
-    #run_if_exists(f"{HERE_DIR}/update_wofi_colors.py")
+    run_if_exists(f"{HERE_DIR}/update_wofi_colors.py")
     #run_if_exists(f"{HERE_DIR}/update_gtk_colors.py")
-    
-    
 
     print("Tema aggiornato!")
     print("Monitoraggio delle modifiche dello sfondo...")
