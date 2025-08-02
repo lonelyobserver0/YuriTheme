@@ -2,13 +2,17 @@
 
 WAYBAR_FOLDER="$HOME/.config/waybar"
 SCSS_FILE="$WAYBAR_FOLDER/style.scss"
+CSS_FILE="$WAYBAR_FOLDER/style.css"
 
+# Crea la cartella se non esiste
+mkdir -p "$WAYBAR_FOLDER"
+
+# Crea il file solo se non esiste
 if [ -e "$SCSS_FILE" ]; then
     echo "Il file scss esiste già"
 else
     cat <<'EOF' > "$SCSS_FILE"
 @use '../../.cache/wal/colors.scss' as walcolors;
-
 
 $radius: 15px;
 $padding-y: 3px;
@@ -121,8 +125,8 @@ tooltip {
   color: walcolors.$color5;
   transition: all 0.2s ease-in-out;
 }
-
 EOF
 fi
 
-sass "$SCSS_FILE" "$WAYBAR_FOLDER/style.css"
+# Compila lo SCSS in CSS
+sass "$SCSS_FILE" "$CSS_FILE"

@@ -1,7 +1,12 @@
 #!/bin/bash
 
+
 SWAYNC_FOLDER="$HOME/.config/swaync"
 SCSS_FILE="$SWAYNC_FOLDER/style.scss"
+CSS_FILE="$SWAYNC_FOLDER/style.css"
+
+# Crea la cartella se non esiste
+mkdir -p "$SWAYNC_FOLDER"
 
 if [ -e "$SCSS_FILE" ]; then
     echo "Il file scss esiste già"
@@ -238,5 +243,15 @@ $mpris-button-hover: rgba(0, 0, 0, 0.5);
 EOF
 fi
 
-sass "$SCSS_FILE" "$SWAYNC_FOLDER/style.css"
+# Compila lo SCSS in CSS
+echo "Compilo SCSS in CSS..."
+if sass "$SCSS_FILE" "$CSS_FILE"; then
+    echo "Compilazione SCSS completata: $CSS_FILE"
+else
+    echo "Errore nella compilazione SCSS!" >&2
+    exit 1
+fi
+
+# Ricarica swaync
+echo "Ricarico SwayNC..."
 swaync-client -rs
