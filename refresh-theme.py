@@ -97,7 +97,7 @@ def apply_desktop_themes():
             log_error("Errore nell'applicare il tema a Wofi", e)
 
 
-def apply_bar_themes():
+def apply_foot_themes():
     if file_exists("~/.cache/wal/colors-foot.ini"):
         try:
             subprocess.run(["cp", os.path.expanduser("~/.cache/wal/colors-foot.ini"), os.path.expanduser("~/.config/foot/")], check=True)
@@ -138,7 +138,7 @@ def apply_theme():
 
     apply_desktop_themes()
     apply_terminal_themes()
-    apply_bar_themes()
+    apply_foot_themes()
     update_starship_colors()
     reload_bars()
     
