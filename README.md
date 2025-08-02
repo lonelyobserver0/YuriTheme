@@ -2,8 +2,8 @@
 
 ## Description
 
- A python app to change popoular linux desktop sofwtare theme according to wallpaper. It satys in background and read change of wallpaper, then read swww/eDP1 file to retrieve background image path.
- It writes log in `~/.cache/theme_changer_errors.log` file
+A python app to change popoular linux desktop sofwtare theme according to wallpaper. It satys in background and read change of wallpaper, then read swww/eDP1 file to retrieve background image path.
+It writes log in `~/.cache/theme_changer_errors.log` file.
 
 ## Use
 
