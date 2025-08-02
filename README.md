@@ -3,7 +3,7 @@
 ## Description
 
 A python app to change popoular linux desktop sofwtare theme according to wallpaper. It satys in background and read change of wallpaper, then read swww/eDP1 file to retrieve background image path.
-The software try to create scss file for swaync and wofi, if they doesn't already exists.
+The software try to create scss file for swaync, wofi and waybar, if they doesn't already exists.
 It writes log in `~/.cache/theme_changer_errors.log` file.
 
 ## Use
