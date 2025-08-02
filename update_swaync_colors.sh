@@ -7,7 +7,7 @@ if [ -e "$SCSS_FILE" ]; then
     echo "Il file scss esiste già"
 else
     cat <<'EOF' > "$SCSS_FILE"
-    @use '../../.cache/wal/colors.scss' as walcolors;
+@use '../../.cache/wal/colors.scss' as walcolors;
 
 * {
     outline: none;
