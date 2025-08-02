@@ -238,7 +238,5 @@ $mpris-button-hover: rgba(0, 0, 0, 0.5);
 EOF
 fi
 
-cd $SWAYNC_FOLDER
-sass style.scss style.css
-
+sass "$SCSS_FILE" "$SWAYNC_FOLDER/style.css"
 swaync-client -rs

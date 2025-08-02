@@ -1,6 +1,7 @@
 #!/bin/bash
 
-SCSS_FILE="$HOME/.config/wofi/style.scss"
+WOFI_FOLDER="$HOME/.config/wofi"
+SCSS_FILE="$HOME/style.scss"
 
 if [ -e "$SCSS_FILE" ]; then
     echo "Il file scss esiste già"
@@ -60,4 +61,4 @@ EOF
 fi
 
 cd ~/.config/wofi/
-sass style.scss style.css
+sass "$SCSS_FILE" "$WOFI_FOLDER/style.css"
