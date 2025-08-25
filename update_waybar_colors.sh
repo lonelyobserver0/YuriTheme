@@ -130,3 +130,4 @@ fi
 
 # Compila lo SCSS in CSS
 sass "$SCSS_FILE" "$CSS_FILE"
+sed -i '1{/^@charset "UTF-8";$/d}' $CSS_FILE
